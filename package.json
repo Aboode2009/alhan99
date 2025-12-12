@@ -10,6 +10,9 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
     "@capacitor/android": "^7.4.4",
     "@capacitor/background-runner": "^2.2.0",
