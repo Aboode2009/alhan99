@@ -1,67 +1,42 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
 import path from "path";
+import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
 
+// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
   },
-  build: {
-    commonjsOptions: {
-      include: [/node_modules/],
-      extensions: [".js", ".cjs", ".mjs"],
-    },
-    chunkSizeWarningLimit: 1000,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          react: ["react", "react-dom", "react-router-dom"],
-          supabase: ["@supabase/supabase-js"],
-          radix: [
-            "@radix-ui/react-accordion",
-            "@radix-ui/react-dialog",
-            "@radix-ui/react-dropdown-menu",
-            "@radix-ui/react-navigation-menu",
-            "@radix-ui/react-popover",
-            "@radix-ui/react-progress",
-            "@radix-ui/react-select",
-            "@radix-ui/react-slider",
-            "@radix-ui/react-toast",
-            "@radix-ui/react-tooltip",
-          ],
-          charts: ["recharts"],
-        },
-      },
-    },
-  },
   plugins: [
     react(),
+    mode === "development" && componentTagger(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "robots.txt", "logo.png"],
+      includeAssets: ["favicon.ico", "robots.txt"],
       manifest: {
-        name: "Music Player",
-        short_name: "Music",
-        description: "تشغيل وتنزيل الأغاني مع دعم الأوفلاين.",
-        theme_color: "#0a0a0a",
-        background_color: "#0a0a0a",
+        name: "ألحان - تطبيق الموسيقى العربية",
+        short_name: "ألحان",
+        description: "استمتع بأفضل الأغاني العربية من YouTube مع ميزة التحميل",
+        theme_color: "#1a1a1a",
+        background_color: "#1a1a1a",
         display: "standalone",
         orientation: "portrait",
         icons: [
           {
-            src: "/logo.png",
+            src: "/icon-192.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "/logo.png",
+            src: "/icon-512.png",
             sizes: "512x512",
             type: "image/png",
           },
           {
-            src: "/logo.png",
+            src: "/icon-512.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "any maskable",
@@ -78,7 +53,7 @@ export default defineConfig(({ mode }) => ({
               cacheName: "youtube-images",
               expiration: {
                 maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 * 30,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
               },
             },
           },
@@ -89,7 +64,7 @@ export default defineConfig(({ mode }) => ({
               cacheName: "youtube-api",
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 60 * 60,
+                maxAgeSeconds: 60 * 60, // 1 hour
               },
             },
           },
@@ -100,14 +75,6 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "@floating-ui/dom": path.resolve(
-        __dirname,
-        "./node_modules/@floating-ui/dom/dist/floating-ui.dom.esm.js",
-      ),
-      "@floating-ui/core": path.resolve(
-        __dirname,
-        "./node_modules/@floating-ui/core/dist/floating-ui.core.esm.js",
-      ),
     },
   },
 }));
